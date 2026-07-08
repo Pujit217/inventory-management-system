@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Low Stock Components</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+            <h2>Inventory Management System</h2>
+        </div>
+
+		<a href="/"><span>🏠</span> Dashboard</a>
+		<a href="/add"><span>➕</span> Add Component</a>
+		<a href="/components"><span>📦</span> View Components</a>
+		<a href="/low-stock"><span>⚠️</span> Low Stock</a>
+		<a href="/report"><span>📊</span> Reports</a>
+		<a href="/production"><span>🏭</span> Production</a>
+		<a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Low Stock Components</h1>
+            <p>These components are below their low stock limit.</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Part</th>
+                <th>Quantity</th>
+                <th>Low Stock Limit</th>
+                <th>Supplier</th>
+            </tr>
+
+            <tr th:each="component : ${components}">
+                <td th:text="${component.componentId}"></td>
+                <td th:text="${component.category}"></td>
+                <td th:text="${component.part}"></td>
+                <td th:text="${component.quantity}"></td>
+                <td th:text="${component.lowStockLimit}"></td>
+                <td th:text="${component.supplier.supplierName}"></td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

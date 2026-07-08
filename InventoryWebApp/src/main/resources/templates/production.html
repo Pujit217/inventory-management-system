@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Production Planning</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+            <h2>Inventory Management System</h2>
+        </div>
+
+        <a href="/"><span>🏠</span> Dashboard</a>
+        <a href="/add"><span>➕</span> Add Component</a>
+        <a href="/components"><span>📦</span> View Components</a>
+        <a href="/low-stock"><span>⚠️</span> Low Stock</a>
+        <a href="/report"><span>📊</span> Reports</a>
+        <a href="/production"><span>🏭</span> Production</a>
+		<a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Production Planning</h1>
+            <p>Create products, assign BOM components, and check production stock availability.</p>
+        </div>
+
+        <h2 class="section-title">Add Product</h2>
+
+        <form action="/production/add-product" method="post">
+            <input type="number" name="productId" placeholder="Product ID" required>
+            <input type="text" name="productName" placeholder="Product Name" required>
+            <input type="text" name="description" placeholder="Description" required>
+            <input type="text" name="status" placeholder="Status" required>
+            <button type="submit">Add Product</button>
+        </form>
+
+        <h2 class="section-title">Add BOM Item</h2>
+
+        <form action="/production/add-bom" method="post">
+            <input type="number" name="bomId" placeholder="BOM ID" required>
+            <input type="number" name="productId" placeholder="Product ID" required>
+            <input type="number" name="componentId" placeholder="Component ID" required>
+            <input type="number" name="quantityRequired" placeholder="Quantity Required Per Product" required>
+            <input type="number" step="0.01" name="costPerComponent" placeholder="Cost Per Component" required>
+            <button type="submit">Add BOM Item</button>
+        </form>
+
+        <h2 class="section-title">Create Production Plan</h2>
+
+        <form action="/production/add-plan" method="post">
+            <input type="number" name="planId" placeholder="Plan ID" required>
+            <input type="number" name="productId" placeholder="Product ID" required>
+            <input type="number" name="productionQuantity" placeholder="Production Quantity" required>
+            <input type="text" name="status" placeholder="Status" required>
+            <button type="submit">Create Plan</button>
+        </form>
+
+		<h2 class="section-title">Analyze Production Plan</h2>
+
+		<form action="/production/analyze" method="get">
+
+		    <select name="planId" required>
+		        <option value="">Select Production Plan</option>
+
+		        <option th:each="plan : ${plans}"
+		                th:value="${plan.planId}"
+		                th:text="${plan.product.productName + ' - ' + plan.productionQuantity + ' units'}">
+		        </option>
+		    </select>
+
+		    <button type="submit">Analyze</button>
+
+		</form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

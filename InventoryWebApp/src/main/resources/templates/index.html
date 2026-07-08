@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inventory Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+            <h2>Inventory Management System</h2>
+        </div>
+
+        <a href="/"><span>🏠</span> Dashboard</a>
+        <a href="/add"><span>➕</span> Add Component</a>
+        <a href="/components"><span>📦</span> View Components</a>
+        <a href="/low-stock"><span>⚠️</span> Low Stock</a>
+        <a href="/report"><span>📊</span> Reports</a>
+		<a href="/production"><span>🏭</span> Production</a>
+		<a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header dashboard-hero">
+            <h1>Inventory Dashboard</h1>
+            <p>Manage electronic components, suppliers, stock levels, and reports.</p>
+        </div>
+
+        <div class="cards dashboard-cards">
+
+            <div class="card stat-card blue-card">
+                <div class="card-header">
+                    <div>
+                        <h3>Total Components</h3>
+                        <small>All components in inventory</small>
+                    </div>
+                    <img th:src="@{/images/ComponentIcon.png}" alt="Components">
+                </div>
+                <p th:text="${totalComponents}">0</p>
+            </div>
+
+            <div class="card stat-card green-card">
+                <div class="card-header">
+                    <div>
+                        <h3>Total Quantity</h3>
+                        <small>Total available stock</small>
+                    </div>
+                    <img th:src="@{/images/quantity.png}" alt="Quantity">
+                </div>
+                <p th:text="${totalQuantity}">0</p>
+            </div>
+
+            <div class="card stat-card orange-card">
+                <div class="card-header">
+                    <div>
+                        <h3>Low Stock Items</h3>
+                        <small>Items below minimum limit</small>
+                    </div>
+                    <img th:src="@{/images/lowinventory.png}" alt="Low Stock">
+                </div>
+                <p th:text="${lowStockCount}">0</p>
+            </div>
+
+			<a href="/production/analysis" class="card stat-card purple-card dashboard-link-card">
+			    <div class="card-header">
+			        <div>
+			            <h3>Production Analysis</h3>
+			            <small>Check BOM stock availability</small>
+			        </div>
+			        <span class="big-icon">🏭</span>
+			    </div>
+			    <p>Open</p>
+			</a>
+        </div>
+
+        <div class="overview-panel">
+
+            <h2>Inventory System Overview</h2>
+
+            <p>
+                This Inventory Management System helps track electronic components,
+                monitor stock levels, identify low-stock items, manage supplier
+                information, and generate inventory reports. All inventory data is
+                securely stored in a MySQL database and can be updated in real time
+                through the application interface.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

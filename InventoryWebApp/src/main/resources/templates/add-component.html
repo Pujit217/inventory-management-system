@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Component</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+
+            <h2>Inventory Management System</h2>
+
+        </div>
+
+		<a href="/"><span>🏠</span> Dashboard</a>
+		<a href="/add"><span>➕</span> Add Component</a>
+		<a href="/components"><span>📦</span> View Components</a>
+		<a href="/low-stock"><span>⚠️</span> Low Stock</a>
+		<a href="/report"><span>📊</span> Reports</a>
+		<a href="/production"><span>🏭</span> Production</a>
+		<a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Add Component</h1>
+            <p>Enter supplier and component details to add a new inventory item.</p>
+        </div>
+
+        <form action="/add" method="post">
+
+            <h2>Supplier Details</h2>
+
+            <input type="number" name="supplierId" placeholder="Supplier ID" required>
+
+            <input type="text" name="supplierName" placeholder="Supplier Name" required>
+
+            <input type="text" name="contactNumber" placeholder="Contact Number" required>
+
+            <input type="email" name="email" placeholder="Email" required>
+
+            <input type="text" name="purchaseLink" placeholder="Purchase Link" required>
+
+            <h2>Component Details</h2>
+
+            <input type="number" name="componentId" placeholder="Component ID" required>
+
+            <input type="text" name="category" placeholder="Category" required>
+
+            <input type="number" name="item" placeholder="Item" required>
+
+            <input type="number" name="quantity" placeholder="Quantity" required>
+
+            <input type="text" name="referenceList" placeholder="Reference List" required>
+
+            <input type="text" name="part" placeholder="Part" required>
+
+            <input type="text" name="pcbFootprint" placeholder="PCB Footprint" required>
+
+            <input type="text" name="manufacturer" placeholder="Manufacturer" required>
+
+            <input type="text" name="manufacturerPn" placeholder="Manufacturer PN" required>
+
+            <input type="text" name="description" placeholder="Description" required>
+
+            <input type="text" name="stockDetails" placeholder="Stock Details" required>
+
+            <input type="text" name="locationList" placeholder="Location List" required>
+
+            <input type="number" name="lowStockLimit" placeholder="Low Stock Limit" required>
+
+            <button type="submit">Add Component</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

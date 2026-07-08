@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inventory Reports</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+            <h2>Inventory Management System</h2>
+        </div>
+
+		<a href="/"><span>🏠</span> Dashboard</a>
+		<a href="/add"><span>➕</span> Add Component</a>
+		<a href="/components"><span>📦</span> View Components</a>
+		<a href="/low-stock"><span>⚠️</span> Low Stock</a>
+		<a href="/report"><span>📊</span> Reports</a>
+		<a href="/production"><span>🏭</span> Production</a>
+		<a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Inventory Reports</h1>
+            <p>Monthly stock summary, low stock alerts, and inventory usage report.</p>
+        </div>
+
+        <h2 class="section-title">Monthly Inventory Report - <span th:text="${monthName}"></span></h2>
+
+        <div class="cards">
+            <div class="card stat-card blue-card">
+                <h3>Total Components</h3>
+                <p th:text="${totalComponents}"></p>
+            </div>
+
+            <div class="card stat-card green-card">
+                <h3>Total Stock Quantity</h3>
+                <p th:text="${totalQuantity}"></p>
+            </div>
+
+            <div class="card stat-card orange-card">
+                <h3>Low Stock Items</h3>
+                <p th:text="${lowStockCount}"></p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Stock Summary and Usage</h2>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Part</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Low Stock Limit</th>
+                <th>Status</th>
+                <th>Supplier</th>
+            </tr>
+
+            <tr th:each="component : ${components}">
+                <td th:text="${component.componentId}"></td>
+                <td th:text="${component.category}"></td>
+                <td th:text="${component.part}"></td>
+                <td th:text="${component.item}"></td>
+                <td th:text="${component.quantity}"></td>
+                <td th:text="${component.lowStockLimit}"></td>
+
+                <td>
+                    <span th:if="${component.quantity < component.lowStockLimit}">Low Stock</span>
+                    <span th:if="${component.quantity >= component.lowStockLimit and component.quantity <= component.lowStockLimit * 2}">Moderate Stock</span>
+                    <span th:if="${component.quantity > component.lowStockLimit * 2}">Healthy Stock</span>
+                </td>
+
+                <td th:text="${component.supplier.supplierName}"></td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

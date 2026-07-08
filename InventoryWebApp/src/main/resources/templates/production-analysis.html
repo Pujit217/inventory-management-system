@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Production Analysis</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+            <h2>Inventory Management System</h2>
+        </div>
+
+        <a href="/"><span>🏠</span> Dashboard</a>
+        <a href="/add"><span>➕</span> Add Component</a>
+        <a href="/components"><span>📦</span> View Components</a>
+        <a href="/low-stock"><span>⚠️</span> Low Stock</a>
+        <a href="/report"><span>📊</span> Reports</a>
+        <a href="/production"><span>🏭</span> Production</a>
+		<a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Production Analysis</h1>
+			<p th:if="${plan != null}">
+			    Product:
+			    <strong th:text="${plan.product.productName}"></strong>
+			    |
+			    Quantity:
+			    <strong th:text="${plan.productionQuantity}"></strong>
+			    |
+			    Status:
+			    <span th:if="${plan.status == 'Current Production'}"
+			          style="color: green; font-weight: bold;">
+			        Current Production
+			    </span>
+
+			    <span th:if="${plan.status != 'Current Production'}"
+			          style="color: orange; font-weight: bold;"
+			          th:text="${plan.status}">
+			    </span>
+			</p>
+            <p>Select a production plan to check BOM stock availability.</p>
+
+            <form action="/production/analyze" method="get">
+
+                <select name="planId" required>
+                    <option value="">Select Production Plan</option>
+
+                    <option th:each="p : ${plans}"
+                            th:value="${p.planId}"
+                            th:selected="${plan != null and p.planId == plan.planId}"
+                            th:text="${p.product.productName + ' - ' + p.productionQuantity + ' units'}">
+                    </option>
+                </select>
+
+                <button type="submit">Analyze</button>
+
+            </form>
+        </div>
+
+        <div th:if="${plan != null}">
+
+            <h2 class="section-title">
+                Result for
+                <span th:text="${plan.product.productName}"></span>
+                -
+                <span th:text="${plan.productionQuantity}"></span>
+                units
+            </h2>
+
+			<a class="download-btn"
+						   th:href="@{/download/bom-report(planId=${plan.planId})}">
+						    Download BOM Report
+						</a>
+						
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Qty Per Product</th>
+                    <th>Required Qty</th>
+                    <th>Available Qty</th>
+                    <th>Shortage</th>
+                    <th>Cost Each</th>
+                    <th>Total Cost</th>
+                    <th>Status</th>
+                </tr>
+
+                <tr th:each="item : ${requirements}">
+                    <td th:text="${item.componentName}"></td>
+                    <td th:text="${item.quantityPerProduct}"></td>
+                    <td th:text="${item.requiredQuantity}"></td>
+                    <td th:text="${item.availableQuantity}"></td>
+                    <td th:text="${item.shortageQuantity}"></td>
+                    <td th:text="${item.costPerComponent}"></td>
+                    <td th:text="${item.totalCost}"></td>
+                    <td th:text="${item.status}"></td>
+                </tr>
+            </table>
+			
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

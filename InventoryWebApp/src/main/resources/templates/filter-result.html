@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Filter Result</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+		<div class="logo-section">
+
+			<a href="/" class="logo-link">
+						    <img th:src="@{/images/logo.png}" alt="Logo">
+						</a>
+
+		    <h2>Inventory Management System</h2>
+
+		</div>
+        <a href="/">Dashboard</a>
+        <a href="/add">Add Component</a>
+        <a href="/components">View Components</a>
+        <a href="/low-stock">Low Stock</a>
+        <a href="/report">Reports</a>
+		<a href="/production"><span>🏭</span> Production</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Category: <span th:text="${category}"></span></h1>
+            <p>Filtered components based on selected category.</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Quantity</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Supplier</th>
+            </tr>
+
+            <tr th:each="component : ${components}">
+                <td th:text="${component.componentId}"></td>
+                <td th:text="${component.componentName}"></td>
+                <td>
+                    <span th:text="${component.value}"></span>
+                    <span th:text="${component.unit}"></span>
+                </td>
+                <td th:text="${component.quantity}"></td>
+                <td th:text="${component.category}"></td>
+                <td th:text="${component.location}"></td>
+                <td th:text="${component.supplier.supplierName}"></td>
+            </tr>
+        </table>
+
+        <p th:if="${components.isEmpty()}">No components found in this category.</p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

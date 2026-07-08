@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Verify Inventory</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+            <h2>Inventory Management System</h2>
+        </div>
+
+        <a href="/"><span>🏠</span> Dashboard</a>
+        <a href="/add"><span>➕</span> Add Component</a>
+        <a href="/components"><span>📦</span> View Components</a>
+        <a href="/low-stock"><span>⚠️</span> Low Stock</a>
+        <a href="/report"><span>📊</span> Reports</a>
+        <a href="/production"><span>🏭</span> Production</a>
+        <a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>Verify Inventory</h1>
+            <p>Check if current stock is enough for a selected production plan.</p>
+        </div>
+
+        <h2 class="section-title">Current Inventory</h2>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Part</th>
+                <th>Available Quantity</th>
+                <th>Low Stock Limit</th>
+            </tr>
+
+            <tr th:each="component : ${components}">
+                <td th:text="${component.componentId}"></td>
+                <td th:text="${component.category}"></td>
+                <td th:text="${component.part}"></td>
+                <td th:text="${component.quantity}"></td>
+                <td th:text="${component.lowStockLimit}"></td>
+            </tr>
+        </table>
+
+        <h2 class="section-title">Select Production Plan</h2>
+
+        <form action="/verify/check" method="get">
+            <select name="planId" required>
+                <option value="">Select Production Plan</option>
+
+                <option th:each="plan : ${plans}"
+                        th:value="${plan.planId}"
+                        th:selected="${selectedPlan != null and plan.planId == selectedPlan.planId}"
+                        th:text="${plan.product.productName + ' - ' + plan.productionQuantity + ' units'}">
+                </option>
+            </select>
+
+            <button type="submit">Verify</button>
+        </form>
+
+        <div th:if="${selectedPlan != null}">
+
+            <h2 class="section-title">
+                Verification Result:
+                <span th:text="${selectedPlan.product.productName}"></span>
+            </h2>
+
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Required Quantity</th>
+                    <th>Available Quantity</th>
+                    <th>Remaining Quantity</th>
+                    <th>Status</th>
+                </tr>
+
+                <tr th:each="row : ${verificationRows}">
+                    <td th:text="${row.componentName}"></td>
+                    <td th:text="${row.requiredQuantity}"></td>
+                    <td th:text="${row.availableQuantity}"></td>
+                    <td th:text="${row.remainingQuantity}"></td>
+                    <td th:text="${row.status}"></td>
+                </tr>
+            </table>
+
+            <div th:if="${canProceed}">
+                <p style="color: green; font-weight: bold;">
+                    Inventory is sufficient. You can proceed with production.
+                </p>
+
+                <form action="/verify/proceed" method="post">
+                    <input type="hidden" name="planId" th:value="${selectedPlan.planId}">
+                    <button type="submit">Proceed</button>
+                </form>
+            </div>
+
+            <div th:if="${!canProceed}">
+                <p style="color: red; font-weight: bold;">
+                    Insufficient inventory. Production cannot proceed.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

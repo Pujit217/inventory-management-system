@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Components</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <div class="sidebar">
+        <div class="logo-section">
+
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
+
+            <h2>Inventory Management System</h2>
+
+        </div>
+
+		<a href="/"><span>🏠</span> Dashboard</a>
+		<a href="/add"><span>➕</span> Add Component</a>
+		<a href="/components"><span>📦</span> View Components</a>
+		<a href="/low-stock"><span>⚠️</span> Low Stock</a>
+		<a href="/report"><span>📊</span> Reports</a>
+		<a href="/production"><span>🏭</span> Production</a>
+		<a href="/verify"><span>✅</span> Production Verification</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="header">
+            <h1>All Components</h1>
+            <p>View, search, filter, update, and manage inventory components.</p>
+        </div>
+
+		<div class="table-container">
+		<table>
+
+            <tr>
+                <th>ID</th>
+                <th style="width:180px;">Category</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Reference</th>
+                <th>Part</th>
+                <th>PCB Footprint</th>
+                <th>Manufacturer</th>
+                <th>Manufacturer PN</th>
+                <th>Location</th>
+                <th>Supplier</th>
+                <th>Actions</th>
+            </tr>
+
+            <tr th:each="component : ${components}">
+
+                <td th:text="${component.componentId}"></td>
+
+                <td th:text="${component.category}"></td>
+
+                <td th:text="${component.item}"></td>
+
+                <td th:text="${component.quantity}"></td>
+
+                <td th:text="${component.referenceList}"></td>
+
+                <td th:text="${component.part}"></td>
+
+                <td th:text="${component.pcbFootprint}"></td>
+
+                <td th:text="${component.manufacturer}"></td>
+
+                <td th:text="${component.manufacturerPn}"></td>
+
+                <td th:text="${component.locationList}"></td>
+
+                <td th:text="${component.supplier.supplierName}"></td>
+
+                <td>
+                    <a class="action-link"
+                       th:href="@{/delete(id=${component.componentId})}">
+                        Delete
+                    </a>
+                </td>
+
+            </tr>
+
+        </table>
+		</div>
+
+        <h2 class="section-title">Update Stock</h2>
+
+        <form action="/update-stock" method="post">
+
+            <input type="number"
+                   name="componentId"
+                   placeholder="Component ID"
+                   required>
+
+            <input type="number"
+                   name="quantity"
+                   placeholder="New Quantity"
+                   required>
+
+            <button type="submit">Update Stock</button>
+
+        </form>
+
+        <h2 class="section-title">Search Component</h2>
+
+        <form action="/search" method="get">
+
+            <input type="text"
+                   name="name"
+                   placeholder="Enter Part Name"
+                   required>
+
+            <button type="submit">Search</button>
+
+        </form>
+
+        <h2 class="section-title">Filter By Category</h2>
+
+        <form action="/filter" method="get">
+
+            <input type="text"
+                   name="category"
+                   placeholder="Enter Category"
+                   required>
+
+            <button type="submit">Filter</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
