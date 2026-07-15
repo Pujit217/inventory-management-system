@@ -305,3 +305,295 @@ td {
 .download-btn:hover {
     background: #444452;
 }
+
+/* ================================
+   DASHBOARD PANELS
+================================ */
+
+.dashboard-summary-cards {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.dashboard-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 35px;
+}
+
+.dashboard-panel {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    min-height: 480px;
+}
+
+.panel-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.panel-title h2 {
+    margin: 0;
+    color: #23395d;
+}
+
+.panel-title p {
+    margin-top: 6px;
+    color: gray;
+    font-size: 14px;
+}
+
+.panel-icon {
+    font-size: 34px;
+}
+
+/* ================================
+   COMPONENT STOCK
+================================ */
+
+.component-stock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.component-stock-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #f8f9fc;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.component-stock-item:hover {
+    background: #eef2ff;
+}
+
+.component-stock-name {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.component-stock-quantity {
+    font-weight: bold;
+    color: #4f46e5;
+    font-size: 17px;
+}
+
+.component-stock-panel{
+    background:#eef4ff;
+    border:1px solid #cfe0ff;
+}
+/* ================================
+   PRODUCTION STATUS
+================================ */
+
+.production-group {
+    margin-bottom: 18px;
+}
+
+.production-group-title {
+    margin-bottom: 15px;
+}
+
+.current-title {
+    color: #16a34a;
+}
+
+.planned-title {
+    color: #2563eb;
+}
+
+.production-plan-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+}
+
+.production-status-panel{
+    background:#f5f0ff;
+    border:1px solid #dac8ff;
+}
+
+.current-plan {
+    background: #ecfdf5;
+}
+
+.planned-plan {
+    background: #eff6ff;
+}
+
+.production-plan-item strong {
+    display: block;
+}
+
+.production-plan-item small {
+    color: gray;
+}
+
+/* ================================
+   VERIFY BUTTON
+================================ */
+
+.verification-shortcut {
+    display: inline-block;
+    margin-top: 15px;
+    background: #4f46e5;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.verification-shortcut:hover {
+    background: #4338ca;
+}
+
+/* ================================
+   EMPTY MESSAGE
+================================ */
+
+.empty-message {
+    color: gray;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+/* Stock condition styling */
+
+.stock-name-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.healthy-stock-row {
+    border-left: 4px solid #22c55e;
+}
+
+.low-stock-row {
+    background: #fff1f1;
+    border-left: 4px solid #ef4444;
+}
+
+.low-stock-label {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.component-stock-quantity {
+    padding: 5px 11px;
+    border-radius: 20px;
+}
+
+.healthy-stock-quantity {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.low-stock-quantity {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+
+/* Production status badges */
+
+.plan-right-section {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.production-badge {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.planned-badge {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.plan-quantity {
+    min-width: 58px;
+    text-align: right;
+}
+
+.planned-plan-link {
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.planned-plan-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+}
+
+.production-analysis-card {
+    max-width: 750px;
+    background: #f5f0ff;
+    border: 1px solid #dac8ff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+}
+
+.production-analysis-card h3 {
+    margin: 0 0 8px;
+    color: #2f2f3a;
+}
+
+.production-analysis-card p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.production-analysis-button {
+    display: inline-block;
+    background: #6d4aff;
+    color: white;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.production-analysis-button:hover {
+    background: #5938dd;
+    transform: translateY(-1px);
+}

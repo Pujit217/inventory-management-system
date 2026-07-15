@@ -92,7 +92,7 @@ public class VerificationManager {
             componentRepository.save(component);
         }
 
-        plan.setStatus("Inventory Verified");
+        plan.setStatus("Current Production");
         productionPlanRepository.save(plan);
     }
 }

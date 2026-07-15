@@ -60,9 +60,24 @@ public class InventoryController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("totalComponents", reportManager.getTotalComponents());
-        model.addAttribute("totalQuantity", reportManager.getTotalQuantity());
-        model.addAttribute("lowStockCount", reportManager.getLowStockCount());
+
+        model.addAttribute("totalComponents",
+                reportManager.getTotalComponents());
+
+        model.addAttribute("lowStockCount",
+                reportManager.getLowStockCount());
+
+        model.addAttribute("components",
+                componentRepository.findAll());
+
+        model.addAttribute("currentProductionPlans",
+                productionPlanRepository
+                        .findByStatusIgnoreCase("Current Production"));
+
+        model.addAttribute("plannedProductionPlans",
+                productionPlanRepository
+                        .findByStatusIgnoreCase("Planned"));
+
         return "index";
     }
 
@@ -302,7 +317,12 @@ public class InventoryController {
     @GetMapping("/verify")
     public String verifyPage(Model model) {
         model.addAttribute("components", componentRepository.findAll());
-        model.addAttribute("plans", productionPlanRepository.findAll());
+
+        model.addAttribute(
+                "plans",
+                productionPlanRepository.findByStatusIgnoreCase("Planned")
+        );
+
         return "verify";
     }
 
@@ -319,7 +339,10 @@ public class InventoryController {
         }
 
         model.addAttribute("components", componentRepository.findAll());
-        model.addAttribute("plans", productionPlanRepository.findAll());
+        model.addAttribute(
+                "plans",
+                productionPlanRepository.findByStatusIgnoreCase("Planned")
+        );
 
         return "verify";
     }

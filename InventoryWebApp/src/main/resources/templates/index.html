@@ -9,10 +9,12 @@
 <div class="layout">
 
     <div class="sidebar">
+
         <div class="logo-section">
             <a href="/" class="logo-link">
                 <img th:src="@{/images/logo.png}" alt="Logo">
             </a>
+
             <h2>Inventory Management System</h2>
         </div>
 
@@ -21,62 +23,242 @@
         <a href="/components"><span>📦</span> View Components</a>
         <a href="/low-stock"><span>⚠️</span> Low Stock</a>
         <a href="/report"><span>📊</span> Reports</a>
-		<a href="/production"><span>🏭</span> Production</a>
-		<a href="/verify"><span>✅</span> Production Verification</a>
+        <a href="/production"><span>🏭</span> Production</a>
+        <a href="/verify"><span>✅</span> Production Verification</a>
+
     </div>
 
     <div class="main-content">
 
         <div class="header dashboard-hero">
             <h1>Inventory Dashboard</h1>
-            <p>Manage electronic components, suppliers, stock levels, and reports.</p>
+
+            <p>
+                Manage electronic components, production plans,
+                stock levels, and reports.
+            </p>
         </div>
 
-        <div class="cards dashboard-cards">
+        <!-- Top dashboard cards -->
+        <div class="dashboard-summary-cards">
 
             <div class="card stat-card blue-card">
+
                 <div class="card-header">
+
                     <div>
                         <h3>Total Components</h3>
-                        <small>All components in inventory</small>
+                        <small>Component types in inventory</small>
                     </div>
-                    <img th:src="@{/images/ComponentIcon.png}" alt="Components">
-                </div>
-                <p th:text="${totalComponents}">0</p>
-            </div>
 
-            <div class="card stat-card green-card">
-                <div class="card-header">
-                    <div>
-                        <h3>Total Quantity</h3>
-                        <small>Total available stock</small>
-                    </div>
-                    <img th:src="@{/images/quantity.png}" alt="Quantity">
+                    <img th:src="@{/images/ComponentIcon.png}"
+                         alt="Components">
+
                 </div>
-                <p th:text="${totalQuantity}">0</p>
+
+                <p th:text="${totalComponents}">0</p>
+
             </div>
 
             <div class="card stat-card orange-card">
+
                 <div class="card-header">
+
                     <div>
                         <h3>Low Stock Items</h3>
-                        <small>Items below minimum limit</small>
+                        <small>Items below minimum stock limit</small>
                     </div>
-                    <img th:src="@{/images/lowinventory.png}" alt="Low Stock">
+
+                    <img th:src="@{/images/lowinventory.png}"
+                         alt="Low Stock">
+
                 </div>
+
                 <p th:text="${lowStockCount}">0</p>
+
             </div>
 
-			<a href="/production/analysis" class="card stat-card purple-card dashboard-link-card">
-			    <div class="card-header">
+            <a href="/production/analysis"
+               class="card stat-card purple-card dashboard-link-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Production Analysis</h3>
+                        <small>Check BOM stock availability</small>
+                    </div>
+
+                    <span class="big-icon">🏭</span>
+
+                </div>
+
+                <p>Open</p>
+
+            </a>
+
+        </div>
+
+        <!-- Component stock and production status -->
+        <div class="dashboard-detail-grid">
+
+            <!-- Component Stock -->
+            <div class="dashboard-panel component-stock-panel">
+
+                <div class="panel-title">
+
+                    <div>
+                        <h2>Current Component Stock</h2>
+                        <p>Available quantity for each component</p>
+                    </div>
+
+                    <span class="panel-icon">📦</span>
+
+                </div>
+
+                <div class="component-stock-list">
+
+					<div class="component-stock-item"
+					     th:each="component : ${components}"
+					     th:classappend="${component.quantity < component.lowStockLimit}
+					                     ? ' low-stock-row'
+					                     : ' healthy-stock-row'">
+
+					    <div class="stock-name-section">
+
+					        <span class="component-stock-name"
+					              th:text="${component.category}">
+					            Component
+					        </span>
+
+					        <small class="low-stock-label"
+					               th:if="${component.quantity < component.lowStockLimit}">
+					            Low Stock
+					        </small>
+
+					    </div>
+
+					    <span class="component-stock-quantity"
+					          th:classappend="${component.quantity < component.lowStockLimit}
+					                          ? ' low-stock-quantity'
+					                          : ' healthy-stock-quantity'"
+					          th:text="${component.quantity}">
+					        0
+					    </span>
+
+					</div>
+
+                </div>
+
+                <div class="empty-message"
+                     th:if="${#lists.isEmpty(components)}">
+
+                    No components are currently available.
+
+                </div>
+
+            </div>
+
+			<!-- Production Status -->
+			<div class="dashboard-panel production-status-panel">
+
+			    <div class="panel-title">
+
 			        <div>
-			            <h3>Production Analysis</h3>
-			            <small>Check BOM stock availability</small>
+			            <h2>Production Status</h2>
+			            <p>Current and upcoming production plans</p>
 			        </div>
-			        <span class="big-icon">🏭</span>
+
+			        <span class="panel-icon">🏭</span>
+
 			    </div>
-			    <p>Open</p>
-			</a>
+
+			    <!-- Current Production -->
+			    <div class="production-group">
+
+			        <h3 class="production-group-title current-title">
+			            In Production
+			        </h3>
+
+			        <div class="production-plan-item current-plan"
+			             th:each="plan : ${currentProductionPlans}">
+
+			            <div>
+			                <strong th:text="${plan.product.productName}">
+			                    Product Name
+			                </strong>
+
+			                <small>Current production</small>
+			            </div>
+
+			            <div class="plan-right-section">
+
+			                <span class="status-badge production-badge">
+			                    In Production
+			                </span>
+
+			                <span class="plan-quantity">
+			                    <strong th:text="${plan.productionQuantity}">0</strong>
+			                    units
+			                </span>
+
+			            </div>
+
+			        </div>
+
+			        <p class="empty-message"
+			           th:if="${#lists.isEmpty(currentProductionPlans)}">
+			            No products are currently in production.
+			        </p>
+
+			    </div>
+
+			    <!-- Planned Production -->
+			    <div class="production-group">
+
+			        <h3 class="production-group-title planned-title">
+			            Planned Products
+			        </h3>
+
+			        <a href="/verify"
+			           class="production-plan-item planned-plan planned-plan-link"
+			           th:each="plan : ${plannedProductionPlans}">
+
+			            <div>
+			                <strong th:text="${plan.product.productName}">
+			                    Product Name
+			                </strong>
+
+			                <small>Waiting for stock verification</small>
+			            </div>
+
+			            <div class="plan-right-section">
+
+			                <span class="status-badge planned-badge">
+			                    Planned
+			                </span>
+
+			                <span class="plan-quantity">
+			                    <strong th:text="${plan.productionQuantity}">0</strong>
+			                    units
+			                </span>
+
+			            </div>
+
+			        </a>
+
+			        <p class="empty-message"
+			           th:if="${#lists.isEmpty(plannedProductionPlans)}">
+			            No planned production orders are available.
+			        </p>
+
+			    </div>
+
+			    <a href="/verify" class="verification-shortcut">
+			        Verify Planned Production
+			    </a>
+
+			</div>
+
         </div>
 
         <div class="overview-panel">
@@ -84,11 +266,11 @@
             <h2>Inventory System Overview</h2>
 
             <p>
-                This Inventory Management System helps track electronic components,
-                monitor stock levels, identify low-stock items, manage supplier
-                information, and generate inventory reports. All inventory data is
-                securely stored in a MySQL database and can be updated in real time
-                through the application interface.
+                This Inventory Management System tracks electronic components,
+                monitors stock availability, manages Bills of Materials,
+                verifies planned production, and identifies component shortages.
+                Inventory and production information is stored in a MySQL database
+                and updated through the application.
             </p>
 
         </div>

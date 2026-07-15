@@ -65,20 +65,21 @@
 
 		<h2 class="section-title">Analyze Production Plan</h2>
 
-		<form action="/production/analyze" method="get">
+		<div class="production-analysis-card">
 
-		    <select name="planId" required>
-		        <option value="">Select Production Plan</option>
+		    <div>
+		        <h3>Analyze Production Requirements</h3>
 
-		        <option th:each="plan : ${plans}"
-		                th:value="${plan.planId}"
-		                th:text="${plan.product.productName + ' - ' + plan.productionQuantity + ' units'}">
-		        </option>
-		    </select>
+		        <p>
+		            Check BOM requirements, available component stock,
+		            shortages, and estimated production cost before manufacturing.
+		        </p>
+		    </div>
 
-		    <button type="submit">Analyze</button>
-
-		</form>
+		    <a href="/production/analysis"
+		       class="production-analysis-button">
+		        Open Production Analysis
+		    </a>
 
     </div>
 
