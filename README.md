@@ -167,9 +167,82 @@
 	production_plan	Stores production schedules, quantities, status, and production planning information.
 	
 Key Relationships
-One supplier can provide multiple inventory components.
-One product can contain multiple components through the Bill of Materials (BOM).
-A single component can be used in multiple products.
-Each production plan is associated with one finished product.
 
-Database Schema Screenshot
+	- One supplier can provide multiple inventory components.
+	- One product can contain multiple components through the Bill of Materials (BOM).
+	- A single component can be used in multiple products.
+	- Each production plan is associated with one finished product.
+
+> Database Schema Screenshot
+
+📂 Project Structure
+
+	InventoryWebApp
+	│
+	├── src
+	│   ├── main
+	│   │   ├── java
+	│   │   │   └── com.inventory.InventoryWebApp
+	│   │   │       ├── controller
+	│   │   │       │   └── InventoryController.java
+	│   │   │       │
+	│   │   │       ├── model
+	│   │   │       │   ├── Supplier.java
+	│   │   │       │   ├── Component.java
+	│   │   │       │   ├── Product.java
+	│   │   │       │   ├── BomItem.java
+	│   │   │       │   └── ProductionPlan.java
+	│   │   │       │
+	│   │   │       ├── repository
+	│   │   │       │   ├── SupplierRepository.java
+	│   │   │       │   ├── ComponentRepository.java
+	│   │   │       │   ├── ProductRepository.java
+	│   │   │       │   ├── BomItemRepository.java
+	│   │   │       │   └── ProductionPlanRepository.java
+	│   │   │       │
+	│   │   │       ├── service
+	│   │   │       │   ├── InventoryManager.java
+	│   │   │       │   ├── ProductManager.java
+	│   │   │       │   ├── ProductionManager.java
+	│   │   │       │   ├── ReportManager.java
+	│   │   │       │   └── VerificationManager.java
+	│   │   │       │
+	│   │   │       └── InventoryWebAppApplication.java
+	│   │   │
+	│   │   └── resources
+	│   │       ├── static
+	│   │       │   ├── css
+	│   │       │   └── images
+	│   │       ├── templates
+	│   │       └── application.properties
+	│   │
+	│   └── test
+	│
+	├── .mvn
+	├── .gitignore
+	├── mvnw
+	├── mvnw.cmd
+	├── pom.xml
+	└── README.md
+
+🚀 Getting Started
+
+	☁️ Deployment
+
+	The Inventory Management System is deployed on **Amazon Web Services (AWS EC2)**,
+	allowing users to access the application through a web browser without installing
+	or configuring the project locally.
+
+	Live Demo
+
+> **Application URL:** *(Will be updated after deployment)*
+
+	Demo Inventory
+
+	The demo environment includes sample suppliers, inventory components, products,
+	Bills of Materials (BOM), and production plans that demonstrate the application's
+	inventory management, production planning, production analysis, production verification,
+	reporting, and dashboard features.
+	
+	
+	
