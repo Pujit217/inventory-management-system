@@ -23,17 +23,17 @@ DROP TABLE IF EXISTS `bom_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bom_item` (
-  `bom_id` int NOT NULL,
+  `bom_id` int NOT NULL AUTO_INCREMENT,
   `cost_per_component` double NOT NULL,
   `quantity_required` int NOT NULL,
   `component_id` int DEFAULT NULL,
   `product_id` int DEFAULT NULL,
   PRIMARY KEY (`bom_id`),
-  KEY `FK93e9cqlpcecl51xpwc1r79kkh` (`component_id`),
-  KEY `FKnjv78g697vkvl8x1jfhf8c9dw` (`product_id`),
-  CONSTRAINT `FK93e9cqlpcecl51xpwc1r79kkh` FOREIGN KEY (`component_id`) REFERENCES `component` (`component_id`),
-  CONSTRAINT `FKnjv78g697vkvl8x1jfhf8c9dw` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_bom_component` (`component_id`),
+  KEY `FK_bom_product` (`product_id`),
+  CONSTRAINT `FK_bom_component` FOREIGN KEY (`component_id`) REFERENCES `component` (`component_id`),
+  CONSTRAINT `FK_bom_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=508 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `bom_item` (
 
 LOCK TABLES `bom_item` WRITE;
 /*!40000 ALTER TABLE `bom_item` DISABLE KEYS */;
-INSERT INTO `bom_item` VALUES (1,0.1,2,1001,1),(2,0.25,1,1002,1),(3,3,1,1003,1),(4,3,1,1004,1),(5,0.5,1,1005,1),(6,0.75,1,1006,1),(7,0.1,3,1001,2),(8,0.25,1,1002,2),(9,0.35,1,1003,2),(10,3,1,1004,2),(11,0.1,5,1001,3),(12,0.25,3,1002,3),(13,3,1,1004,3),(14,0.5,1,1005,3),(15,0.75,1,1006,3);
+INSERT INTO `bom_item` VALUES (1,0.1,2,1001,1),(2,0.25,1,1002,1),(3,3,1,1003,1),(4,3,1,1004,1),(5,0.5,1,1005,1),(6,0.75,1,1006,1),(7,0.1,3,1001,2),(8,0.25,1,1002,2),(9,0.35,1,1003,2),(10,3,1,1004,2),(11,0.1,5,1001,3),(12,0.25,3,1002,3),(13,3,1,1004,3),(14,0.5,1,1005,3),(15,0.75,1,1006,3),(401,0.1,2,1001,4),(402,3,1,1004,4),(403,0.75,2,1006,4),(404,0.5,1,1005,4),(501,0.1,4,1001,5),(502,0.25,2,1002,5),(503,3,1,1004,5),(504,0.75,1,1006,5),(505,0.5,2,1005,5),(506,0.35,1,1003,5);
 /*!40000 ALTER TABLE `bom_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS `component`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `component` (
-  `component_id` int NOT NULL,
+  `component_id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(255) DEFAULT NULL,
   `low_stock_limit` int NOT NULL,
   `quantity` int NOT NULL,
@@ -69,9 +69,9 @@ CREATE TABLE `component` (
   `reference_list` varchar(2000) DEFAULT NULL,
   `stock_details` varchar(3000) DEFAULT NULL,
   PRIMARY KEY (`component_id`),
-  KEY `FK8o9oy97ii60dnb484cnamudif` (`supplier_id`),
-  CONSTRAINT `FK8o9oy97ii60dnb484cnamudif` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_component_supplier` (`supplier_id`),
+  CONSTRAINT `FK_component_supplier` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`supplier_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1008 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,7 +80,7 @@ CREATE TABLE `component` (
 
 LOCK TABLES `component` WRITE;
 /*!40000 ALTER TABLE `component` DISABLE KEYS */;
-INSERT INTO `component` VALUES (1001,'Resistor',50,225,101,'10K Resistor ',100,'ab-130','Stackpole Electronics Inc','RMCF0603FT10K0','10K','R0603','R1, R2, R4, R5, R7','Loose Stock 10000'),(1002,'Capacitor',10,125,102,'0.1 µF 50V Ceramic Capacitor X7R 0805',9,'ab-170, S.R. 151 - S.R. 156','KEMET','C0805C104K5RACAUTO','0.1uF/50V','C0805','C38,C39,C45,C46,C51,C52,C8,C9,C16,C25,C78,C83,C84,C85,C2,C3,C31,C39','Sealed Stock 4000, 6 packs x 4000'),(1003,'Diode',10,100,103,'19V Clamp 5A TVS Diode Surface Mount SOD-323',40,'ab-13,ab-15,ab-18,S.R.259,S.R.355-S.R.366,S.R.370-S.R.372','ON Semiconductor','SD12CT1G','SD12CT1G','SOD-323','D3,D4,D5,D6','Loose Stock 3000,500,1000,2500 | Sealed Packs 12x3000,3x3000'),(1004,'IC',5,5,104,'Linear Voltage Regulator IC Positive Fixed 1 Output 250mA SOT-23-3',126,'S.R. 265','Microchip Technology','MCP1700T-2802E/TT','MCP1700T-2802E/TT','SOT23','U5','Quantity 1500'),(1005,'Inductor',5,75,105,'60 Ohms @ 100 MHz Power Line Ferrite Bead 0805',68,'ab-101','Murata Electronics','BLM21PG600SN1D','BLM21PG600SN1D','L0805','L4','Loose Stock 2000,2200'),(1006,'Connectors/Switches',50,875,106,'A200 Switch',0,'N/A','CTS Corporation','PTS645SM43SMTR 92 LFS','PTS645SM43SMTR 92 LFS','N/A','N/A','Quantity 900');
+INSERT INTO `component` VALUES (1001,'Resistor',50,25,101,'10K Resistor ',100,'ab-130','Stackpole Electronics Inc','RMCF0603FT10K0','10K','R0603','R1, R2, R4, R5, R7','Loose Stock 10000'),(1002,'Capacitor',10,5,102,'0.1 µF 50V Ceramic Capacitor X7R 0805',9,'ab-170, S.R. 151 - S.R. 156','KEMET','C0805C104K5RACAUTO','0.1uF/50V','C0805','C38,C39,C45,C46,C51,C52,C8,C9,C16,C25,C78,C83,C84,C85,C2,C3,C31,C39','Sealed Stock 4000, 6 packs x 4000'),(1003,'Diode',10,50,103,'19V Clamp 5A TVS Diode Surface Mount SOD-323',40,'ab-13,ab-15,ab-18,S.R.259,S.R.355-S.R.366,S.R.370-S.R.372','ON Semiconductor','SD12CT1G','SD12CT1G','SOD-323','D3,D4,D5,D6','Loose Stock 3000,500,1000,2500 | Sealed Packs 12x3000,3x3000'),(1004,'IC',5,65,104,'Linear Voltage Regulator IC Positive Fixed 1 Output 250mA SOT-23-3',126,'S.R. 265','Microchip Technology','MCP1700T-2802E/TT','MCP1700T-2802E/TT','SOT23','U5','Quantity 1500'),(1005,'Inductor',5,175,105,'60 Ohms @ 100 MHz Power Line Ferrite Bead 0805',68,'ab-101','Murata Electronics','BLM21PG600SN1D','BLM21PG600SN1D','L0805','L4','Loose Stock 2000,2200'),(1006,'Connectors/Switches',50,850,106,'A200 Switch',0,'N/A','CTS Corporation','PTS645SM43SMTR 92 LFS','PTS645SM43SMTR 92 LFS','N/A','N/A','Quantity 900');
 /*!40000 ALTER TABLE `component` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,12 +92,12 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
-  `product_id` int NOT NULL,
+  `product_id` int NOT NULL AUTO_INCREMENT,
   `description` varchar(255) DEFAULT NULL,
   `product_name` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +106,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Breath Alcohol Analyser','Breathlyzer','Current Production'),(2,'Sensor module used inside breath alcohol detection device','Alcohol Sensor Module','Planned'),(3,'PCB control board used in electronic measurement devices','Control Board Assembly','Current Production');
+INSERT INTO `product` VALUES (1,'Breath Alcohol Analyser','Breathlyzer','Current Production'),(2,'Sensor module used inside breath alcohol detection device','Alcohol Sensor Module','Planned'),(3,'PCB control board used in electronic measurement devices','Control Board Assembly','Current Production'),(4,'IoT Smart Door Lock','Smart Door Lock','Active'),(5,'Wi-Fi Enabled Smoke Detection Device','Smart Smoke Detector','Active');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -118,14 +118,14 @@ DROP TABLE IF EXISTS `production_plan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `production_plan` (
-  `plan_id` int NOT NULL,
+  `plan_id` int NOT NULL AUTO_INCREMENT,
   `production_quantity` int NOT NULL,
   `status` varchar(255) DEFAULT NULL,
   `product_id` int DEFAULT NULL,
   PRIMARY KEY (`plan_id`),
-  KEY `FK1iqm77sgn2w7gsgsg25jefy6q` (`product_id`),
-  CONSTRAINT `FK1iqm77sgn2w7gsgsg25jefy6q` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_plan_product` (`product_id`),
+  CONSTRAINT `FK_plan_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +134,7 @@ CREATE TABLE `production_plan` (
 
 LOCK TABLES `production_plan` WRITE;
 /*!40000 ALTER TABLE `production_plan` DISABLE KEYS */;
-INSERT INTO `production_plan` VALUES (1,100,'Current Production',1),(2,50,'Inventory Verified',2),(3,25,'Inventory Verified',3);
+INSERT INTO `production_plan` VALUES (1,100,'Current Production',1),(2,50,'Current Production',2),(3,25,'Current Production',3),(104,20,'Planned',4),(105,30,'Planned',5);
 /*!40000 ALTER TABLE `production_plan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,13 +146,13 @@ DROP TABLE IF EXISTS `supplier`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `supplier` (
-  `supplier_id` int NOT NULL,
+  `supplier_id` int NOT NULL AUTO_INCREMENT,
   `contact_number` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `purchase_link` varchar(255) DEFAULT NULL,
   `supplier_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,4 +174,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-09 11:48:04
+-- Dump completed on 2026-07-19 16:21:16

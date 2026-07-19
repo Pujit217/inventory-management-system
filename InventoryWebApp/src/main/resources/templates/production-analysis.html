@@ -3,6 +3,7 @@
 <head>
     <title>Production Analysis</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+	<link rel="icon" type="image/png" th:href="@{/favicon/favicon.png}">
 </head>
 <body>
 
@@ -21,7 +22,7 @@
         <a href="/components"><span>📦</span> View Components</a>
         <a href="/low-stock"><span>⚠️</span> Low Stock</a>
         <a href="/report"><span>📊</span> Reports</a>
-        <a href="/production"><span>🏭</span> Production</a>
+        <a href="/production" class="active"><span>🏭</span> Production</a>
 		<a href="/verify"><span>✅</span> Production Verification</a>
     </div>
 
@@ -66,47 +67,89 @@
             </form>
         </div>
 
-        <div th:if="${plan != null}">
+		<div th:if="${plan != null}" class="analysis-result-section">
 
-            <h2 class="section-title">
-                Result for
-                <span th:text="${plan.product.productName}"></span>
-                -
-                <span th:text="${plan.productionQuantity}"></span>
-                units
-            </h2>
+		    <div class="analysis-result-header">
 
-			<a class="download-btn"
-						   th:href="@{/download/bom-report(planId=${plan.planId})}">
-						    Download BOM Report
-						</a>
-						
-            <table>
-                <tr>
-                    <th>Component</th>
-                    <th>Qty Per Product</th>
-                    <th>Required Qty</th>
-                    <th>Available Qty</th>
-                    <th>Shortage</th>
-                    <th>Cost Each</th>
-                    <th>Total Cost</th>
-                    <th>Status</th>
-                </tr>
+		        <div>
+		            <h2>
+		                Production Analysis Result
+		            </h2>
 
-                <tr th:each="item : ${requirements}">
-                    <td th:text="${item.componentName}"></td>
-                    <td th:text="${item.quantityPerProduct}"></td>
-                    <td th:text="${item.requiredQuantity}"></td>
-                    <td th:text="${item.availableQuantity}"></td>
-                    <td th:text="${item.shortageQuantity}"></td>
-                    <td th:text="${item.costPerComponent}"></td>
-                    <td th:text="${item.totalCost}"></td>
-                    <td th:text="${item.status}"></td>
-                </tr>
-            </table>
-			
+		            <p>
+		                <strong th:text="${plan.product.productName}"></strong>
+		                —
+		                <span th:text="${plan.productionQuantity}"></span>
+		                units
+		            </p>
+		        </div>
 
-        </div>
+		        <a class="download-btn"
+		           th:href="@{/download/bom-report(planId=${plan.planId})}">
+
+		            <span>⬇️</span>
+		            Download BOM Report
+
+		        </a>
+
+		    </div>
+
+		    <div class="table-container">
+
+		        <table class="analysis-table">
+
+		            <thead>
+		                <tr>
+		                    <th>Component</th>
+		                    <th>Qty Per Product</th>
+		                    <th>Required Qty</th>
+		                    <th>Available Qty</th>
+		                    <th>Shortage</th>
+		                    <th>Cost Each</th>
+		                    <th>Total Cost</th>
+		                    <th>Status</th>
+		                </tr>
+		            </thead>
+
+		            <tbody>
+
+		                <tr th:each="item : ${requirements}">
+
+		                    <td th:text="${item.componentName}"></td>
+		                    <td th:text="${item.quantityPerProduct}"></td>
+		                    <td th:text="${item.requiredQuantity}"></td>
+		                    <td th:text="${item.availableQuantity}"></td>
+
+		                    <td>
+		                        <span th:classappend="${item.shortageQuantity > 0}
+		                                             ? 'shortage-value'
+		                                             : 'no-shortage-value'"
+		                              th:text="${item.shortageQuantity}">
+		                        </span>
+		                    </td>
+
+		                    <td th:text="${'$' + item.costPerComponent}"></td>
+
+		                    <td th:text="${'$' + item.totalCost}"></td>
+
+		                    <td>
+		                        <span class="analysis-status"
+		                              th:classappend="${item.status == 'Available'}
+		                                              ? ' status-available'
+		                                              : ' status-shortage'"
+		                              th:text="${item.status}">
+		                        </span>
+		                    </td>
+
+		                </tr>
+
+		            </tbody>
+
+		        </table>
+
+		    </div>
+
+		</div>
 
     </div>
 

@@ -2,17 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Production Planning</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon"
+          type="image/png"
+          th:href="@{/favicon/favicon.png}">
 </head>
 <body>
 
 <div class="layout">
 
     <div class="sidebar">
+
         <div class="logo-section">
             <a href="/" class="logo-link">
                 <img th:src="@{/images/logo.png}" alt="Logo">
             </a>
+
             <h2>Inventory Management System</h2>
         </div>
 
@@ -21,65 +27,330 @@
         <a href="/components"><span>📦</span> View Components</a>
         <a href="/low-stock"><span>⚠️</span> Low Stock</a>
         <a href="/report"><span>📊</span> Reports</a>
-        <a href="/production"><span>🏭</span> Production</a>
-		<a href="/verify"><span>✅</span> Production Verification</a>
+
+        <a href="/production" class="active">
+            <span>🏭</span> Production
+        </a>
+
+        <a href="/verify">
+            <span>✅</span> Production Verification
+        </a>
+
     </div>
 
     <div class="main-content">
 
         <div class="header">
             <h1>Production Planning</h1>
-            <p>Create products, assign BOM components, and check production stock availability.</p>
+
+            <p>
+                Create products, assign BOM components,
+                and prepare production plans.
+            </p>
         </div>
 
-        <h2 class="section-title">Add Product</h2>
+        <div class="production-form-grid">
 
-        <form action="/production/add-product" method="post">
-            <input type="number" name="productId" placeholder="Product ID" required>
-            <input type="text" name="productName" placeholder="Product Name" required>
-            <input type="text" name="description" placeholder="Description" required>
-            <input type="text" name="status" placeholder="Status" required>
-            <button type="submit">Add Product</button>
-        </form>
+            <!-- Add Product -->
+            <div class="production-form-card">
 
-        <h2 class="section-title">Add BOM Item</h2>
+                <div class="production-form-heading">
+                    <span>📦</span>
 
-        <form action="/production/add-bom" method="post">
-            <input type="number" name="bomId" placeholder="BOM ID" required>
-            <input type="number" name="productId" placeholder="Product ID" required>
-            <input type="number" name="componentId" placeholder="Component ID" required>
-            <input type="number" name="quantityRequired" placeholder="Quantity Required Per Product" required>
-            <input type="number" step="0.01" name="costPerComponent" placeholder="Cost Per Component" required>
-            <button type="submit">Add BOM Item</button>
-        </form>
+                    <div>
+                        <h2>Add Product</h2>
+                        <p>Create a new product for manufacturing.</p>
+                    </div>
+                </div>
 
-        <h2 class="section-title">Create Production Plan</h2>
+                <form action="/production/add-product"
+                      method="post"
+                      class="production-form">
 
-        <form action="/production/add-plan" method="post">
-            <input type="number" name="planId" placeholder="Plan ID" required>
-            <input type="number" name="productId" placeholder="Product ID" required>
-            <input type="number" name="productionQuantity" placeholder="Production Quantity" required>
-            <input type="text" name="status" placeholder="Status" required>
-            <button type="submit">Create Plan</button>
-        </form>
+                    <input type="text"
+                           name="productName"
+                           placeholder="Product Name"
+                           required>
 
-		<h2 class="section-title">Analyze Production Plan</h2>
+                    <input type="text"
+                           name="description"
+                           placeholder="Product Description"
+                           required>
 
-		<div class="production-analysis-card">
+                    <select name="status" required>
+                        <option value="">Select Product Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Planned">Planned</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
 
-		    <div>
-		        <h3>Analyze Production Requirements</h3>
+                    <button type="submit">
+                        Add Product
+                    </button>
 
-		        <p>
-		            Check BOM requirements, available component stock,
-		            shortages, and estimated production cost before manufacturing.
-		        </p>
-		    </div>
+                </form>
 
-		    <a href="/production/analysis"
-		       class="production-analysis-button">
-		        Open Production Analysis
-		    </a>
+            </div>
+
+            <!-- Add BOM Item -->
+            <div class="production-form-card">
+
+                <div class="production-form-heading">
+                    <span>🧾</span>
+
+                    <div>
+                        <h2>Add BOM Item</h2>
+                        <p>Assign an inventory component to a product.</p>
+                    </div>
+                </div>
+
+                <form action="/production/add-bom"
+                      method="post"
+                      class="production-form">
+
+                    <select name="productId" required>
+                        <option value="">Select Product</option>
+
+                        <option th:each="product : ${products}"
+                                th:value="${product.productId}"
+                                th:text="${product.productName}">
+                        </option>
+                    </select>
+
+                    <select name="componentId" required>
+                        <option value="">Select Component</option>
+
+                        <option th:each="component : ${components}"
+                                th:value="${component.componentId}"
+                                th:text="${component.category + ' - ' + component.part}">
+                        </option>
+                    </select>
+
+                    <input type="number"
+                           name="quantityRequired"
+                           placeholder="Quantity Required Per Product"
+                           min="1"
+                           required>
+
+                    <input type="number"
+                           name="costPerComponent"
+                           placeholder="Cost Per Component"
+                           min="0.01"
+                           step="0.01"
+                           required>
+
+                    <button type="submit">
+                        Add BOM Item
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Create Production Plan -->
+            <div class="production-form-card">
+
+                <div class="production-form-heading">
+                    <span>🏭</span>
+
+                    <div>
+                        <h2>Create Production Plan</h2>
+                        <p>Schedule a quantity of a product for production.</p>
+                    </div>
+                </div>
+
+                <form action="/production/add-plan"
+                      method="post"
+                      class="production-form">
+
+                    <select name="productId" required>
+                        <option value="">Select Product</option>
+
+                        <option th:each="product : ${products}"
+                                th:value="${product.productId}"
+                                th:text="${product.productName}">
+                        </option>
+                    </select>
+
+                    <input type="number"
+                           name="productionQuantity"
+                           placeholder="Production Quantity"
+                           min="1"
+                           required>
+
+                    <button type="submit">
+                        Create Production Plan
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- Production Analysis -->
+        <div class="production-analysis-section">
+
+            <div class="production-analysis-card">
+
+                <div class="production-analysis-content">
+
+                    <span class="production-analysis-icon">📊</span>
+
+                    <div>
+                        <h3>Analyze Production Requirements</h3>
+
+                        <p>
+                            Check BOM requirements, available component stock,
+                            shortages, and estimated production cost before
+                            manufacturing.
+                        </p>
+                    </div>
+
+                </div>
+
+                <a href="/production/analysis"
+                   class="production-analysis-button">
+
+                    Open Production Analysis
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Production Status -->
+        <div class="production-status-management">
+
+            <!-- Current Production -->
+            <div class="production-status-column current-production-column">
+
+                <div class="production-list-header">
+
+                    <div>
+                        <h2>Current Production</h2>
+                        <p>Products currently being manufactured.</p>
+                    </div>
+
+                    <span class="production-list-icon">🏭</span>
+
+                </div>
+
+                <div class="production-plan-list"
+                     th:if="${!#lists.isEmpty(currentProductionPlans)}">
+
+                    <div class="production-plan-row"
+                         th:each="plan : ${currentProductionPlans}">
+
+                        <div class="production-plan-information">
+
+                            <h3 th:text="${plan.product.productName}">
+                                Product Name
+                            </h3>
+
+                            <p>
+                                Plan ID:
+                                <strong th:text="${plan.planId}"></strong>
+                            </p>
+
+                        </div>
+
+                        <div class="production-plan-quantity">
+
+                            <strong th:text="${plan.productionQuantity}">
+                                0
+                            </strong>
+
+                            <span>Units</span>
+
+                        </div>
+
+                        <span class="production-plan-badge current-production-badge">
+                            Current Production
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="production-empty-state"
+                     th:if="${#lists.isEmpty(currentProductionPlans)}">
+
+                    <p>No products are currently in production.</p>
+
+                </div>
+
+            </div>
+
+            <!-- Planned Production -->
+            <div class="production-status-column planned-production-column">
+
+                <div class="production-list-header">
+
+                    <div>
+                        <h2>Planned Production</h2>
+                        <p>Products waiting for analysis and verification.</p>
+                    </div>
+
+                    <span class="production-list-icon">📋</span>
+
+                </div>
+
+                <div class="production-plan-list"
+                     th:if="${!#lists.isEmpty(plannedProductionPlans)}">
+
+                    <div class="production-plan-row"
+                         th:each="plan : ${plannedProductionPlans}">
+
+                        <div class="production-plan-information">
+
+                            <h3 th:text="${plan.product.productName}">
+                                Product Name
+                            </h3>
+
+                            <p>
+                                Plan ID:
+                                <strong th:text="${plan.planId}"></strong>
+                            </p>
+
+                        </div>
+
+                        <div class="production-plan-quantity">
+
+                            <strong th:text="${plan.productionQuantity}">
+                                0
+                            </strong>
+
+                            <span>Units</span>
+
+                        </div>
+
+                        <span class="production-plan-badge planned-production-badge">
+                            Planned
+                        </span>
+
+                        <a class="production-plan-analyze-button"
+                           th:href="@{/production/analyze(planId=${plan.planId})}">
+
+                            Analyze
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="production-empty-state"
+                     th:if="${#lists.isEmpty(plannedProductionPlans)}">
+
+                    <p>No production plans are waiting for analysis.</p>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 

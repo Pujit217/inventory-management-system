@@ -3,6 +3,7 @@
 <head>
     <title>Add Component</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+	<link rel="icon" type="image/png" th:href="@{/favicon/favicon.png}">
 </head>
 <body>
 
@@ -20,7 +21,7 @@
         </div>
 
 		<a href="/"><span>🏠</span> Dashboard</a>
-		<a href="/add"><span>➕</span> Add Component</a>
+		<a href="/add" class="active"><span>➕</span> Add Component</a>
 		<a href="/components"><span>📦</span> View Components</a>
 		<a href="/low-stock"><span>⚠️</span> Low Stock</a>
 		<a href="/report"><span>📊</span> Reports</a>
@@ -39,8 +40,6 @@
 
             <h2>Supplier Details</h2>
 
-            <input type="number" name="supplierId" placeholder="Supplier ID" required>
-
             <input type="text" name="supplierName" placeholder="Supplier Name" required>
 
             <input type="text" name="contactNumber" placeholder="Contact Number" required>
@@ -50,8 +49,6 @@
             <input type="text" name="purchaseLink" placeholder="Purchase Link" required>
 
             <h2>Component Details</h2>
-
-            <input type="number" name="componentId" placeholder="Component ID" required>
 
             <input type="text" name="category" placeholder="Category" required>
 

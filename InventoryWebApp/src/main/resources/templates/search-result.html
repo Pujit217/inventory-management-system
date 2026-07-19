@@ -2,67 +2,150 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Search Result</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon"
+          type="image/png"
+          th:href="@{/favicon/favicon.png}">
 </head>
 <body>
 
 <div class="layout">
 
     <div class="sidebar">
-		<div class="logo-section">
 
-			<a href="/" class="logo-link">
-						    <img th:src="@{/images/logo.png}" alt="Logo">
-						</a>
+        <div class="logo-section">
 
-		    <h2>Inventory Management System</h2>
+            <a href="/" class="logo-link">
+                <img th:src="@{/images/logo.png}" alt="Logo">
+            </a>
 
-		</div>
-        <a href="/">Dashboard</a>
-        <a href="/add">Add Component</a>
-        <a href="/components">View Components</a>
-        <a href="/low-stock">Low Stock</a>
-        <a href="/report">Reports</a>
-		<a href="/production"><span>🏭</span> Production</a>
+            <h2>Inventory Management System</h2>
+
+        </div>
+
+        <a href="/"><span>🏠</span> Dashboard</a>
+        <a href="/add"><span>➕</span> Add Component</a>
+        <a href="/components" class="active">
+            <span>📦</span> View Components
+        </a>
+        <a href="/low-stock"><span>⚠️</span> Low Stock</a>
+        <a href="/report"><span>📊</span> Reports</a>
+        <a href="/production"><span>🏭</span> Production</a>
+        <a href="/verify"><span>✅</span> Production Verification</a>
+
     </div>
 
     <div class="main-content">
 
         <div class="header">
-            <h1>Search Result</h1>
-            <p>Component matching your search query.</p>
+
+            <h1>Search Results</h1>
+
+            <p>
+                Results for:
+                <strong th:text="${searchText}"></strong>
+            </p>
+
         </div>
 
-        <div th:if="${component != null}">
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Value</th>
-                    <th>Quantity</th>
-                    <th>Category</th>
-                    <th>Location</th>
-                    <th>Supplier</th>
-                </tr>
+        <div class="component-table-section"
+             th:if="${!#lists.isEmpty(components)}">
 
-                <tr>
-                    <td th:text="${component.componentId}"></td>
-                    <td th:text="${component.componentName}"></td>
-                    <td>
-                        <span th:text="${component.value}"></span>
-                        <span th:text="${component.unit}"></span>
-                    </td>
-                    <td th:text="${component.quantity}"></td>
-                    <td th:text="${component.category}"></td>
-                    <td th:text="${component.location}"></td>
-                    <td th:text="${component.supplier.supplierName}"></td>
-                </tr>
-            </table>
+            <div class="section-heading-row">
+
+                <div>
+                    <h2>Matching Components</h2>
+                    <p>Components matching your search query.</p>
+                </div>
+
+                <span class="record-count">
+                    <span th:text="${#lists.size(components)}">0</span>
+                    results
+                </span>
+
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Category</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Part</th>
+                            <th>PCB Footprint</th>
+                            <th>Manufacturer</th>
+                            <th>Manufacturer PN</th>
+                            <th>Location</th>
+                            <th>Supplier</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="component : ${components}">
+
+                            <td th:text="${component.componentId}"></td>
+
+                            <td th:text="${component.category}"></td>
+
+                            <td th:text="${component.item}"></td>
+
+                            <td>
+                                <span class="quantity-badge"
+                                      th:text="${component.quantity}">
+                                </span>
+                            </td>
+
+                            <td th:text="${component.part}"></td>
+
+                            <td th:text="${component.pcbFootprint}"></td>
+
+                            <td th:text="${component.manufacturer}"></td>
+
+                            <td th:text="${component.manufacturerPn}"></td>
+
+                            <td th:text="${component.locationList}"></td>
+
+                            <td th:text="${component.supplier != null
+                                         ? component.supplier.supplierName
+                                         : 'Not Assigned'}">
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
 
-        <div th:if="${component == null}">
-            <p>No component found.</p>
+        <div class="component-table-section"
+             th:if="${#lists.isEmpty(components)}">
+
+            <p class="table-empty-message">
+
+                No component was found for
+                "<strong th:text="${searchText}"></strong>".
+
+            </p>
+
         </div>
+
+        <a href="/components"
+           class="production-analysis-button">
+
+            Back to Components
+
+        </a>
 
     </div>
 

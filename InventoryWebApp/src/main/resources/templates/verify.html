@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Verify Inventory</title>
+    <title>Production Verification</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon"
+          type="image/png"
+          th:href="@{/favicon/favicon.png}">
 </head>
 <body>
 
 <div class="layout">
 
     <div class="sidebar">
+
         <div class="logo-section">
             <a href="/" class="logo-link">
                 <img th:src="@{/images/logo.png}" alt="Logo">
             </a>
+
             <h2>Inventory Management System</h2>
         </div>
 
@@ -22,92 +28,273 @@
         <a href="/low-stock"><span>⚠️</span> Low Stock</a>
         <a href="/report"><span>📊</span> Reports</a>
         <a href="/production"><span>🏭</span> Production</a>
-        <a href="/verify"><span>✅</span> Production Verification</a>
+        <a href="/verify" class="active">
+            <span>✅</span> Production Verification
+        </a>
+
     </div>
 
     <div class="main-content">
 
         <div class="header">
-            <h1>Verify Inventory</h1>
-            <p>Check if current stock is enough for a selected production plan.</p>
+            <h1>Production Verification</h1>
+
+            <p>
+                Verify whether the current component stock is sufficient
+                for a planned production order.
+            </p>
         </div>
 
-        <h2 class="section-title">Current Inventory</h2>
+        <!-- Current inventory -->
+        <div class="verification-section">
 
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Category</th>
-                <th>Part</th>
-                <th>Available Quantity</th>
-                <th>Low Stock Limit</th>
-            </tr>
+            <div class="verification-section-header">
 
-            <tr th:each="component : ${components}">
-                <td th:text="${component.componentId}"></td>
-                <td th:text="${component.category}"></td>
-                <td th:text="${component.part}"></td>
-                <td th:text="${component.quantity}"></td>
-                <td th:text="${component.lowStockLimit}"></td>
-            </tr>
-        </table>
+                <div>
+                    <h2>Current Inventory</h2>
+                    <p>Available component quantities before production.</p>
+                </div>
 
-        <h2 class="section-title">Select Production Plan</h2>
+                <span class="verification-section-icon">📦</span>
 
-        <form action="/verify/check" method="get">
-            <select name="planId" required>
-                <option value="">Select Production Plan</option>
-
-                <option th:each="plan : ${plans}"
-                        th:value="${plan.planId}"
-                        th:selected="${selectedPlan != null and plan.planId == selectedPlan.planId}"
-                        th:text="${plan.product.productName + ' - ' + plan.productionQuantity + ' units'}">
-                </option>
-            </select>
-
-            <button type="submit">Verify</button>
-        </form>
-
-        <div th:if="${selectedPlan != null}">
-
-            <h2 class="section-title">
-                Verification Result:
-                <span th:text="${selectedPlan.product.productName}"></span>
-            </h2>
-
-            <table>
-                <tr>
-                    <th>Component</th>
-                    <th>Required Quantity</th>
-                    <th>Available Quantity</th>
-                    <th>Remaining Quantity</th>
-                    <th>Status</th>
-                </tr>
-
-                <tr th:each="row : ${verificationRows}">
-                    <td th:text="${row.componentName}"></td>
-                    <td th:text="${row.requiredQuantity}"></td>
-                    <td th:text="${row.availableQuantity}"></td>
-                    <td th:text="${row.remainingQuantity}"></td>
-                    <td th:text="${row.status}"></td>
-                </tr>
-            </table>
-
-            <div th:if="${canProceed}">
-                <p style="color: green; font-weight: bold;">
-                    Inventory is sufficient. You can proceed with production.
-                </p>
-
-                <form action="/verify/proceed" method="post">
-                    <input type="hidden" name="planId" th:value="${selectedPlan.planId}">
-                    <button type="submit">Proceed</button>
-                </form>
             </div>
 
-            <div th:if="${!canProceed}">
-                <p style="color: red; font-weight: bold;">
-                    Insufficient inventory. Production cannot proceed.
-                </p>
+            <div class="table-container">
+
+                <table class="verification-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Category</th>
+                            <th>Part</th>
+                            <th>Available Quantity</th>
+                            <th>Low Stock Limit</th>
+                            <th>Stock Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="component : ${components}">
+
+                            <td th:text="${component.componentId}"></td>
+
+                            <td th:text="${component.category}"></td>
+
+                            <td th:text="${component.part}"></td>
+
+                            <td>
+                                <span class="quantity-badge"
+                                      th:classappend="${component.quantity < component.lowStockLimit}
+                                                      ? ' quantity-low'
+                                                      : ' quantity-healthy'"
+                                      th:text="${component.quantity}">
+                                </span>
+                            </td>
+
+                            <td th:text="${component.lowStockLimit}"></td>
+
+                            <td>
+                                <span class="verification-status"
+                                      th:classappend="${component.quantity < component.lowStockLimit}
+                                                      ? ' verification-insufficient'
+                                                      : ' verification-sufficient'"
+                                      th:text="${component.quantity < component.lowStockLimit}
+                                               ? 'Low Stock'
+                                               : 'Available'">
+                                </span>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- Select production plan -->
+        <div class="verification-plan-card">
+
+            <div class="verification-section-header">
+
+                <div>
+                    <h2>Select Planned Production</h2>
+
+                    <p>
+                        Choose a planned product to verify its component requirements.
+                    </p>
+                </div>
+
+                <span class="verification-section-icon">🏭</span>
+
+            </div>
+
+            <form action="/verify/check"
+                  method="get"
+                  class="verification-plan-form">
+
+                <select name="planId" required>
+
+                    <option value="">
+                        Select Production Plan
+                    </option>
+
+                    <option th:each="plan : ${plans}"
+                            th:value="${plan.planId}"
+                            th:selected="${selectedPlan != null
+                                         and plan.planId == selectedPlan.planId}"
+                            th:text="${plan.product.productName
+                                      + ' - '
+                                      + plan.productionQuantity
+                                      + ' units'}">
+                    </option>
+
+                </select>
+
+                <button type="submit">
+                    Verify Inventory
+                </button>
+
+            </form>
+
+            <p class="empty-message"
+               th:if="${#lists.isEmpty(plans)}">
+
+                No planned production orders are waiting for verification.
+
+            </p>
+
+        </div>
+
+        <!-- Verification result -->
+        <div th:if="${selectedPlan != null}"
+             class="verification-result-section">
+
+            <div class="verification-result-header">
+
+                <div>
+                    <h2>Verification Result</h2>
+
+                    <p>
+                        <strong th:text="${selectedPlan.product.productName}">
+                            Product
+                        </strong>
+
+                        —
+
+                        <span th:text="${selectedPlan.productionQuantity}">0</span>
+                        units
+                    </p>
+                </div>
+
+                <a class="download-btn"
+                   th:href="@{/download/bom-report(planId=${selectedPlan.planId})}">
+
+                    <span>⬇️</span>
+                    Download BOM Report
+
+                </a>
+
+            </div>
+
+            <div class="table-container">
+
+                <table class="verification-table">
+
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Required Quantity</th>
+                            <th>Available Quantity</th>
+                            <th>Remaining Quantity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="row : ${verificationRows}">
+
+                            <td th:text="${row.componentName}"></td>
+
+                            <td th:text="${row.requiredQuantity}"></td>
+
+                            <td th:text="${row.availableQuantity}"></td>
+
+                            <td>
+                                <span th:classappend="${row.remainingQuantity < 0}
+                                                     ? ' remaining-negative'
+                                                     : ' remaining-positive'"
+                                      th:text="${row.remainingQuantity}">
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="verification-status"
+                                      th:classappend="${row.status == 'Sufficient'}
+                                                      ? ' verification-sufficient'
+                                                      : ' verification-insufficient'"
+                                      th:text="${row.status}">
+                                </span>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- Successful verification -->
+            <div th:if="${canProceed}"
+                 class="verification-message verification-success">
+
+                <div>
+                    <h3>Inventory Verified</h3>
+
+                    <p>
+                        All required components are available.
+                        You may proceed with production.
+                    </p>
+                </div>
+
+                <form action="/verify/proceed"
+                      method="post"
+                      class="verification-proceed-form">
+
+                    <input type="hidden"
+                           name="planId"
+                           th:value="${selectedPlan.planId}">
+
+                    <button type="submit"
+                            onclick="return confirm('Proceed with production and deduct the required component quantities?');">
+
+                        Proceed to Production
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Failed verification -->
+            <div th:if="${!canProceed}"
+                 class="verification-message verification-failure">
+
+                <div>
+                    <h3>Insufficient Inventory</h3>
+
+                    <p>
+                        One or more required components are unavailable.
+                        Production cannot proceed until the shortage is resolved.
+                    </p>
+                </div>
+
             </div>
 
         </div>

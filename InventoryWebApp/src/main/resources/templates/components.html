@@ -2,13 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>View Components</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon"
+          type="image/png"
+          th:href="@{/favicon/favicon.png}">
 </head>
 <body>
 
 <div class="layout">
 
     <div class="sidebar">
+
         <div class="logo-section">
 
             <a href="/" class="logo-link">
@@ -19,119 +24,271 @@
 
         </div>
 
-		<a href="/"><span>🏠</span> Dashboard</a>
-		<a href="/add"><span>➕</span> Add Component</a>
-		<a href="/components"><span>📦</span> View Components</a>
-		<a href="/low-stock"><span>⚠️</span> Low Stock</a>
-		<a href="/report"><span>📊</span> Reports</a>
-		<a href="/production"><span>🏭</span> Production</a>
-		<a href="/verify"><span>✅</span> Production Verification</a>
+        <a href="/"><span>🏠</span> Dashboard</a>
+        <a href="/add"><span>➕</span> Add Component</a>
+        <a href="/components" class="active">
+            <span>📦</span> View Components
+        </a>
+        <a href="/low-stock"><span>⚠️</span> Low Stock</a>
+        <a href="/report"><span>📊</span> Reports</a>
+        <a href="/production"><span>🏭</span> Production</a>
+        <a href="/verify"><span>✅</span> Production Verification</a>
+
     </div>
 
     <div class="main-content">
 
         <div class="header">
+
             <h1>All Components</h1>
-            <p>View, search, filter, update, and manage inventory components.</p>
+
+            <p>
+                Search, filter, update, and manage inventory components.
+            </p>
+
         </div>
 
-		<div class="table-container">
-		<table>
+        <!-- Search and filter tools -->
+        <div class="component-tools-grid">
 
-            <tr>
-                <th>ID</th>
-                <th style="width:180px;">Category</th>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Reference</th>
-                <th>Part</th>
-                <th>PCB Footprint</th>
-                <th>Manufacturer</th>
-                <th>Manufacturer PN</th>
-                <th>Location</th>
-                <th>Supplier</th>
-                <th>Actions</th>
-            </tr>
+            <div class="component-tool-card">
 
-            <tr th:each="component : ${components}">
+                <div class="tool-card-heading">
+                    <span class="tool-card-icon">🔍</span>
 
-                <td th:text="${component.componentId}"></td>
+                    <div>
+                        <h2>Search Component</h2>
+                        <p>Search using a part name or part number.</p>
+                    </div>
+                </div>
 
-                <td th:text="${component.category}"></td>
+                <form action="/search"
+                      method="get"
+                      class="compact-tool-form">
 
-                <td th:text="${component.item}"></td>
+                    <input type="text"
+                           name="name"
+                           placeholder="Search by part name or part number"
+                           required>
 
-                <td th:text="${component.quantity}"></td>
+                    <button type="submit">
+                        Search
+                    </button>
 
-                <td th:text="${component.referenceList}"></td>
+                </form>
 
-                <td th:text="${component.part}"></td>
+            </div>
 
-                <td th:text="${component.pcbFootprint}"></td>
+            <div class="component-tool-card">
 
-                <td th:text="${component.manufacturer}"></td>
+                <div class="tool-card-heading">
+                    <span class="tool-card-icon">📂</span>
 
-                <td th:text="${component.manufacturerPn}"></td>
+                    <div>
+                        <h2>Filter by Category</h2>
+                        <p>Display components from a selected category.</p>
+                    </div>
+                </div>
 
-                <td th:text="${component.locationList}"></td>
+                <form action="/filter"
+                      method="get"
+                      class="compact-tool-form">
 
-                <td th:text="${component.supplier.supplierName}"></td>
+                    <select name="category" required>
 
-                <td>
-                    <a class="action-link"
-                       th:href="@{/delete(id=${component.componentId})}">
-                        Delete
-                    </a>
-                </td>
+                        <option value="">
+                            Select Category
+                        </option>
 
-            </tr>
+                        <option value="Resistor">
+                            Resistor
+                        </option>
 
-        </table>
-		</div>
+                        <option value="Capacitor">
+                            Capacitor
+                        </option>
 
-        <h2 class="section-title">Update Stock</h2>
+                        <option value="Diode">
+                            Diode
+                        </option>
 
-        <form action="/update-stock" method="post">
+                        <option value="IC">
+                            IC
+                        </option>
 
-            <input type="number"
-                   name="componentId"
-                   placeholder="Component ID"
-                   required>
+                        <option value="Inductor">
+                            Inductor
+                        </option>
 
-            <input type="number"
-                   name="quantity"
-                   placeholder="New Quantity"
-                   required>
+                        <option value="Connectors/Switches">
+                            Connectors/Switches
+                        </option>
 
-            <button type="submit">Update Stock</button>
+                    </select>
 
-        </form>
+                    <button type="submit">
+                        Filter
+                    </button>
 
-        <h2 class="section-title">Search Component</h2>
+                </form>
 
-        <form action="/search" method="get">
+            </div>
 
-            <input type="text"
-                   name="name"
-                   placeholder="Enter Part Name"
-                   required>
+        </div>
 
-            <button type="submit">Search</button>
+        <!-- Components table -->
+        <div class="component-table-section">
 
-        </form>
+            <div class="section-heading-row">
 
-        <h2 class="section-title">Filter By Category</h2>
+                <div>
+                    <h2>Inventory Components</h2>
+                    <p>All components currently stored in the system.</p>
+                </div>
 
-        <form action="/filter" method="get">
+                <span class="record-count">
+                    <span th:text="${#lists.size(components)}">0</span>
+                    records
+                </span>
 
-            <input type="text"
-                   name="category"
-                   placeholder="Enter Category"
-                   required>
+            </div>
 
-            <button type="submit">Filter</button>
+            <div class="table-container">
 
-        </form>
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th style="width: 180px;">Category</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Reference</th>
+                            <th>Part</th>
+                            <th>PCB Footprint</th>
+                            <th>Manufacturer</th>
+                            <th>Manufacturer PN</th>
+                            <th>Location</th>
+                            <th>Supplier</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="component : ${components}">
+
+                            <td th:text="${component.componentId}"></td>
+
+                            <td th:text="${component.category}"></td>
+
+                            <td th:text="${component.item}"></td>
+
+							<td>
+							    <span class="quantity-badge"
+							          th:classappend="${component.quantity < component.lowStockLimit}
+							                          ? ' quantity-low'
+							                          : ' quantity-healthy'"
+							          th:text="${component.quantity}">
+							    </span>
+							</td>
+
+                            <td th:text="${component.referenceList}"></td>
+
+                            <td th:text="${component.part}"></td>
+
+                            <td th:text="${component.pcbFootprint}"></td>
+
+                            <td th:text="${component.manufacturer}"></td>
+
+                            <td th:text="${component.manufacturerPn}"></td>
+
+                            <td th:text="${component.locationList}"></td>
+
+                            <td th:text="${component.supplier != null
+                                         ? component.supplier.supplierName
+                                         : 'Not Assigned'}">
+                            </td>
+
+                            <td>
+
+								<a class="action-link"
+								   th:href="@{/delete(id=${component.componentId})}"
+								   onclick="return confirm('Are you sure you want to delete this component?');">
+								    Delete
+								</a>
+
+                            </td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(components)}">
+
+                            <td colspan="12"
+                                class="table-empty-message">
+
+                                No components were found.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- Update stock -->
+        <div class="update-stock-section">
+
+            <div class="tool-card-heading">
+
+                <span class="tool-card-icon">✏️</span>
+
+                <div>
+                    <h2>Update Component Stock</h2>
+                    <p>Select a component and enter its new quantity.</p>
+                </div>
+
+            </div>
+
+            <form action="/update-stock"
+                  method="post"
+                  class="update-stock-form">
+
+                <select name="componentId" required>
+
+                    <option value="">
+                        Select Component
+                    </option>
+
+                    <option th:each="component : ${components}"
+                            th:value="${component.componentId}"
+                            th:text="${component.category
+                                      + ' - '
+                                      + component.part}">
+                    </option>
+
+                </select>
+
+                <input type="number"
+                       name="quantity"
+                       min="0"
+                       placeholder="New Quantity"
+                       required>
+
+                <button type="submit">
+                    Update Stock
+                </button>
+
+            </form>
+
+        </div>
 
     </div>
 
