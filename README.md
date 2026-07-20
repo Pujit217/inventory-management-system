@@ -18,6 +18,7 @@
 	access layers, making the system modular, maintainable, and scalable.
 	
 > Dashboard Screenshot
+<img width="1897" height="987" alt="Screenshot 2026-07-19 214652" src="https://github.com/user-attachments/assets/019e99ac-428d-4169-99db-2bf436daa26c" />
 
 
 
