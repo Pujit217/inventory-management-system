@@ -118,15 +118,16 @@ public class InventoryManager {
      * The update is ignored when the component ID does not exist.
      *
      * @param componentId ID of the component to update
-     * @param quantity new stock quantity
+     * @param quantity quantity to add to the current stock
      */
     public void updateStock(int componentId, int quantity) {
         Optional<Component> component =
                 componentRepository.findById(componentId);
 
         if (component.isPresent()) {
-            component.get().setQuantity(quantity);
-            componentRepository.save(component.get());
+            Component currentComponent = component.get();
+            currentComponent.setQuantity(currentComponent.getQuantity() + quantity);
+            componentRepository.save(currentComponent);
         }
     }
 
