@@ -1,5 +1,23 @@
 	📦 Inventory Management System
 	Smart Inventory & Production Management Platform
+
+	🚀 Getting Started
+
+		☁️ Deployment
+
+			The Inventory Management System is deployed on **Amazon Web Services (AWS EC2)**,
+			allowing users to access the application through a web browser without installing
+			or configuring the project locally.
+
+		Live Demo
+		Application URL: http://18.227.43.90/inventory/
+
+		Demo Inventory
+
+			The demo environment includes sample suppliers, inventory components, products,
+			Bills of Materials (BOM), and production plans that demonstrate the application's
+			inventory management, production planning, production analysis, production verification,
+			reporting, and dashboard features.
 	
 	📖 Project Overview
 
