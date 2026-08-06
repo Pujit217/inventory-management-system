@@ -10,7 +10,7 @@
 			or configuring the project locally.
 
 		Live Demo
-			**Application URL:** [Open Inventory Management System](http://18.227.43.90/inventory/)
+**Application URL:** http://18.227.43.90/inventory/
 
 		Demo Inventory
 
